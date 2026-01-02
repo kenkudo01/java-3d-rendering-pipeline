@@ -1,4 +1,4 @@
-package mesh;
+package math;
 
 public class Vec3 {
     public double x, y, z;

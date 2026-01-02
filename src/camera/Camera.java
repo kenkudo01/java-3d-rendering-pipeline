@@ -1,6 +1,6 @@
 package camera;
 
-import mesh.Vec3;
+import math.Vec3;
 
 public class Camera {
 

@@ -1,18 +1,18 @@
 package Renderer;
 
 import mesh.Edge;
-import mesh.Vec3;
+import math.Vec3;
 import camera.Camera;
 import mesh.Mesh;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Renderer {
+public class SoftwareRenderer {
 
     private int width, height;
     private BufferedImage canvas;
 
-    public Renderer(int width, int height) {
+    public SoftwareRenderer(int width, int height) {
         this.width = width;
         this.height = height;
         this.canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

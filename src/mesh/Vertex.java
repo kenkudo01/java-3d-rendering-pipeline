@@ -1,5 +1,7 @@
 package mesh;
 
+import math.Vec3;
+
 public class Vertex {
     public Vec3 position;
 
