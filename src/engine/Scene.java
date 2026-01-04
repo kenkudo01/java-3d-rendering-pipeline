@@ -1,25 +1,12 @@
 package engine;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Scene {
+    private final List<GameObject> objects = new ArrayList<>();
 
-    private List<GameObject> objects = new ArrayList<>();
+    public void add(GameObject o){ objects.add(o); }
 
-    public void add(GameObject obj) {
-        objects.add(obj);
-    }
-
-    public void update(double delta) {
-        for (GameObject obj : objects) {
-            obj.update(delta);
-        }
-    }
-
-    public void render() {
-        for (GameObject obj : objects) {
-            obj.render();
-        }
-    }
+    public void update(double dt){ objects.forEach(o->o.update(dt)); }
+    public void render(){ objects.forEach(GameObject::render); }
 }

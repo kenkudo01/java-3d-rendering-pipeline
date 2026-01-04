@@ -1,34 +1,55 @@
 package engine;
 
-import javax.swing.*;
+import camera.Camera;
+import renderer.DebugDrawer;
+import renderer.SoftwareRenderer;
 
 
 public class Engine implements Runnable {
 
-    private boolean running = true;
-    private Scene scene;
+    private final Scene scene;
+    private final SoftwareRenderer renderer;
+    private final DebugDrawer debug;
+    private final Camera camera;
+    private Runnable repaint;
 
-    public Engine(Scene scene) {
+    public Engine(Scene scene,
+                  SoftwareRenderer renderer,
+                  DebugDrawer debug,
+                  Camera camera) {
         this.scene = scene;
+        this.renderer = renderer;
+        this.debug = debug;
+        this.camera = camera;
+    }
+
+    public void setRepaint(Runnable r) {
+        repaint = r;
     }
 
     @Override
     public void run() {
-        long last = System.nanoTime();
+        while (true) {
 
-        while (running) {
-            long now = System.nanoTime();
-            double delta = (now - last) / 1_000_000_000.0;
-            last = now;
+            // ① 前フレームを消す
+            renderer.clear();
 
-            scene.update(delta);
+            // ② Grid（背景）
+//            debug.drawGrid(camera, 20, 1.0);
+
+            // ③ 軸
+//            debug.drawAxes(camera);
+
+            // ④ シーン更新 & 描画
+            scene.update(0.016);
             scene.render();
+
+            // ⑤ Swing に表示
+            if (repaint != null) repaint.run();
 
             try {
                 Thread.sleep(16);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } catch (InterruptedException ignored) {}
         }
     }
 }

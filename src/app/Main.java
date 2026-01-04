@@ -1,12 +1,11 @@
 package app;
 
 import camera.Camera;
-import engine.Engine;
-import engine.MeshObject;
-import engine.Scene;
+import engine.*;
 import math.Vec3;
 import mesh.Mesh;
-import Renderer.SoftwareRenderer;
+import renderer.SoftwareRenderer;
+import renderer.DebugDrawer;
 
 import javax.swing.*;
 
@@ -14,25 +13,36 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // ===== Renderer & Camera =====
         SoftwareRenderer renderer = new SoftwareRenderer(800, 600);
-        Camera camera = new Camera(new Vec3(0,0,-5), Math.toRadians(90));
+        Camera camera = new Camera(new Vec3(0, 3, -6), Math.toRadians(90));
+        camera.position = new Vec3(0, 4, -7);
+        camera.yaw = 0;
+        camera.pitch = Math.toRadians(-0);
 
+
+        // ===== Scene =====
         Scene scene = new Scene();
         scene.add(new MeshObject(Mesh.createCube(), renderer, camera));
 
-        Engine engine = new Engine(scene);
+        // ===== Debug =====
+        DebugDrawer debug = new DebugDrawer(renderer);
 
+        // ===== Engine =====
+        Engine engine = new Engine(scene, renderer, debug, camera);
+
+        // ===== Swing =====
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Java CG Engine");
-            RenderPanel panel = new RenderPanel(renderer);
+            JFrame f = new JFrame("CG Engine");
+            RenderPanel p = new RenderPanel(renderer);
 
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.add(panel);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+            f.add(p);
+            f.pack();
+            f.setLocationRelativeTo(null);
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            f.setVisible(true);
 
-            // 🔴 エンジン開始はウィンドウ生成後
+            engine.setRepaint(p::repaint);
             new Thread(engine).start();
         });
     }
